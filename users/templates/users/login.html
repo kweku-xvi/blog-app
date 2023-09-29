@@ -10,5 +10,8 @@
         {{form|crispy}}
         <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up here</a></p>
         <button type="submit" class="btn btn-success">Sign In</button>
+        <small class="text-muted ml-2">
+            <a href="{% url 'password_reset' %}">Forgot Password?</a>
+        </small>
     </form>
 {% endblock %}
