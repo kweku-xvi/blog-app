@@ -1,9 +1,17 @@
 from django.shortcuts import render, redirect
 from .forms import SignUpForm, UserInfoForm, UserProfileForm
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import (
+    LoginView, 
+    LogoutView, 
+    PasswordResetView, 
+    PasswordResetDoneView,
+    PasswordResetCompleteView,
+    PasswordResetConfirmView,
+    )
 from django.contrib import messages
 from .models import Profile
 from django.contrib.auth.decorators import login_required
+
 
 def signup(request):
     if request.method == 'POST':
@@ -41,3 +49,19 @@ class LogIn(LoginView):
 
 class LogOut(LogoutView):
     template_name = 'users/logout.html'
+
+
+class UserPasswordReset(PasswordResetView):
+    template_name = 'users/password_reset.html'
+
+
+class UserPasswordResetDone(PasswordResetDoneView):
+    template_name = 'users/password_reset_done.html'
+
+
+class UserPasswordResetConfirm(PasswordResetConfirmView):
+    template_name = 'users/password_reset_confirm.html'
+
+
+class UserPasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'users/password_reset_complete.html'
