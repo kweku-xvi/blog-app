@@ -5,21 +5,44 @@
 {% endblock %}
 
 {% block content %}
-<article class="media content-section">
-    <img src="{{ post.author.profile.image.url }}" class="rounded-circle article-img">
+  <article class="media content-section">
+      <img src="{{ post.author.profile.image.url }}" class="rounded-circle article-img">
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+          <small class="text-muted">{{ post.date_posted|date:'F d, Y' }}</small>
+          {% if user == post.author %}
+            <div class="mb-1">
+              <a href="{% url 'blog-delete' post.pk %}" class="btn btn-danger">Delete</a>
+              <a href="{% url 'blog-update' post.pk %}" class="btn btn-primary">Update</a>        
+            </div>
+          {% endif %}
+        </div>
+        <h2>{{ post.title }}</h2>
+        <p class="article-content">{{ post.content }}</p>
+      </div>
+  </article>
+  <!-- ADDING COMMENTS  -->
+  <h2>Comments</h2>
+  <form class="form-group" method="post">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+      <input type="text" name="newComment" placeholder="Add comment">
+      <div class="input-group-prepend">
+          <button type="submit", name="newItem", value="newItem" class="btn btn-success">Add Item</button>
+      </div>
+    </div>
+  </form>
+  {% for comment in post.comment_set.all %}
+  <article class="media content-section">
+    <img src="{{ comment.post.author.profile.image.url }}" class="rounded-circle article-img">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
-        <small class="text-muted">{{ post.date_posted|date:'F d, Y' }}</small>
-        {% if user == post.author %}
-          <div class="mb-1">
-            <a href="{% url 'blog-delete' post.pk %}" class="btn btn-danger">Delete</a>
-            <a href="{% url 'blog-update' post.pk %}" class="btn btn-primary">Update</a>        
-          </div>
-        {% endif %}
+        <a class="mr-2" href="{% url 'user-posts' post.author.username %}">{{ comment.post.author.username }}</a>
+        <small class="text-muted">{{ comment.date_posted|date:'F d, Y H:i' }}</small>
       </div>
-      <h2>{{ post.title }}</h2>
-      <p class="article-content">{{ post.content }}</p>
+      <h6>{{ comment }}</h6>
     </div>
-</article>
+  </article>
+  {% endfor %}
 {% endblock %}
