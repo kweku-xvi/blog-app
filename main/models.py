@@ -15,3 +15,11 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('blog-home')
 
+
+class Comment(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=300)
+    date_posted = models.DateTimeField(default=timezone.now)
+
+    def __str__(self):
+        return self.comment
