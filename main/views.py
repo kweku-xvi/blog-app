@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, CreateView, DetailView, UpdateView, DeleteView
 from .models import Post
 from django.contrib.auth.models import User
@@ -37,9 +37,20 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         form.instance.author = self.request.user
         return super().form_valid(form)
 
+def post_detail(request, pk):
+    post = Post.objects.get(id=pk)
 
-class PostDetailView(DetailView):
-    model = Post
+    if request.method == 'POST':
+        if request.POST.get('newItem'):
+            comment = request.POST.get('newComment')
+            post.comment_set.create(comment=comment)
+            return redirect('blog-detail', post.pk)
+
+    return render(request, 'main/post_detail.html', {'post':post})
+
+
+# class PostDetailView(DetailView):
+#     model = Post
 
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
